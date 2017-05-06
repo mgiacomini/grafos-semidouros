@@ -1,0 +1,14 @@
+strict digraph exemplo {
+
+  X [FIM=1];
+  Y [FIM=1];
+  Z [OUTRO=1];
+
+  A -> B;
+  A -> C;
+  B -> X;
+  B -> Y;
+  B -> Z;
+  C -> Y;
+  C -> Z;
+}
