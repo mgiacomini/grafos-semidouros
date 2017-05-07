@@ -13,6 +13,7 @@ class DotWriter
     f.close
   end
 
+  private
   def write_attrs(f)
     @attrs.each do |node, attrs|
       b = Hash.new(0)
