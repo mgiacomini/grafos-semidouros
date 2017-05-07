@@ -14,6 +14,7 @@ class DotWriter
     f.close if !(dotfile.class == STDOUT.class)
   end
 
+  private
   def write_attrs(f)
     @attrs.each do |node, attrs|
       b = Hash.new(0)
