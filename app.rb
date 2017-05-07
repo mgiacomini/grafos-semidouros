@@ -1,3 +1,5 @@
+require_relative 'parser'
+
 class Graph
 
   def initialize(graph, attrs)
@@ -10,12 +12,10 @@ class Graph
     while queue.size > 0
       current = queue.shift
 
-      if has_attrs?(current)
-        next
-      else
+      unless has_attrs?(current)
         childs = @graph[current] # ex: for 'A' => ['B', 'C']
         unless childs.nil?
-          childs.each do |child|
+          childs.each do |child| # testar se funciona: se current tem filhos sem attributos, enfileirar todos os filhos de current sem atributos
             if has_attrs?(child)
               child_attrs = @attrs[child]
               child_attrs.each { |at| @attrs[current].push at }
@@ -36,20 +36,26 @@ class Graph
 
 end
 
+class App
 
-graph = {
-    'A' => ['B', 'C'],
-    'B' => ['X', 'Y', 'Z'],
-    'C' => ['Y', 'Z']
-}
+  def self.run(dotfile)
+    builder = GraphBuilder.new
 
-attrs = {
-    'X' => ['FIM'],
-    'Y' => ['FIM'],
-    'Z' => ['OUTRO']
-}
+    puts '=== parsing graph'
+    graph = DotParser.parse(dotfile, builder)
+    attrs = builder.attrs
 
-g = Graph.new(graph, attrs)
-g.create('A')
+    puts '=== transforming'
+    puts graph.inspect
+    puts attrs.inspect
+    g = Graph.new(graph, attrs)
+    g.create('A')
 
-p attrs
+    puts '-> attributes'
+    puts attrs.inspect
+  end
+
+end
+
+
+App.run 'sample.dot'
