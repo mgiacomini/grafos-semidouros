@@ -1,3 +1,44 @@
+class DotWriter
+  def initialize(graph={}, attrs={})
+    @graph = graph
+    @attrs = attrs
+  end
+
+  def to_dot(dotfile=STDOUT)
+    f = File.open(dotfile, 'w+')
+    f.puts 'strict digraph exemplo {'
+    write_attrs f
+    write_edges f
+    f.puts '}'
+    f.close
+  end
+
+  def write_attrs(f)
+    @attrs.each do |node, attrs|
+      b = Hash.new(0)
+      # iterate over the array, counting duplicate entries
+      attrs.each do |v|
+        b[v] += 1
+      end
+
+      attrs_list = b.map do |k, v|
+        "#{k}=#{v}"
+      end
+
+      f.puts "  #{node} [#{attrs_list.join(',')}];"
+    end
+  end
+
+  def write_edges(f)
+    @graph.each do |parent, childs|
+      childs.each do |child|
+        f.puts "  #{parent} -> #{child};"
+      end
+    end
+  end
+end
+
+
 class DotParser
 
   def self.parse(dotfile, builder)

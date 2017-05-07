@@ -53,6 +53,11 @@ class App
 
     puts '-> attributes'
     puts attrs.inspect
+
+    writer = DotWriter.new graph, attrs
+    puts '--> writing dot file'
+    writer.to_dot 'sample_transformed.dot'
+
   end
 
 end
