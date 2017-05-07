@@ -5,12 +5,13 @@ class DotWriter
   end
 
   def to_dot(dotfile=STDOUT)
-    f = File.open(dotfile, 'w+')
+    f = File.open(dotfile, 'w+') if !(dotfile.class == STDOUT.class)
+    f = dotfile if dotfile.class == STDOUT.class
     f.puts 'strict digraph exemplo {'
     write_attrs f
     write_edges f
     f.puts '}'
-    f.close
+    f.close if !(dotfile.class == STDOUT.class)
   end
 
   def write_attrs(f)

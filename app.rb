@@ -37,30 +37,27 @@ class Graph
 end
 
 class App
-
   def self.run(dotfile)
     builder = GraphBuilder.new
 
-    puts '=== parsing graph'
+    #puts '=== parsing graph'
     graph = DotParser.parse(dotfile, builder)
     attrs = builder.attrs
 
-    puts '=== transforming'
-    puts graph.inspect
-    puts attrs.inspect
+    #puts '=== transforming'
+    #puts graph.inspect
+    #puts attrs.inspect
     g = Graph.new(graph, attrs)
     g.create('A')
 
-    puts '-> attributes'
-    puts attrs.inspect
+    #puts '-> attributes'
+    #puts attrs.inspect
 
     writer = DotWriter.new graph, attrs
-    puts '--> writing dot file'
-    writer.to_dot 'sample_transformed.dot'
-
+    #puts '--> writing dot file'
+    writer.to_dot
   end
 
 end
 
-
-App.run 'sample.dot'
+App.run ARGV.first
