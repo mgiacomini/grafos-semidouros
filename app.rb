@@ -8,22 +8,23 @@ class Graph
   end
 
   def create(root)
-    queue = [root]
-    while queue.size > 0
-      current = queue.shift
+    stack = [root]
+    while stack.size > 0
+      current = stack.pop
+      parent_pushed = false
+      childs = @graph[current] # ex: for 'A' => ['B', 'C']
+      childs.each do |child|
 
-      unless has_attrs?(current)
-        childs = @graph[current] # ex: for 'A' => ['B', 'C']
-        unless childs.nil?
-          childs.each do |child| # testar se funciona: se current tem filhos sem attributos, enfileirar todos os filhos de current sem atributos
-            if has_attrs?(child)
-              child_attrs = @attrs[child]
-              child_attrs.each { |at| @attrs[current].push at }
-            else
-              queue.push child
-            end
+        if has_attrs?(child)
+          child_attrs = @attrs[child]
+          child_attrs.each { |at| @attrs[current].push at }
+        else
+          unless parent_pushed
+            stack.push current
+            parent_pushed = true
           end
-          queue.push current
+          @attrs[current].clear if has_attrs?(current)
+          stack.push child
         end
       end
     end
@@ -59,5 +60,3 @@ class App
   end
 
 end
-
-App.run ARGV.first
