@@ -1,7 +1,6 @@
 class DotParser
 
-  def self.parse(dotfile)
-    builder = GraphBuilder.new
+  def self.parse(dotfile, builder)
     new(builder).parse(dotfile)
     builder.graph
   end
@@ -10,6 +9,7 @@ class DotParser
     File.open(dotfile) do |f|
       f.each_line do |line|
         edge_from_string line.split('->') if line.match(/->/)
+        attr_from_string line if line.match(/=/)
       end
     end
   end
@@ -25,6 +25,16 @@ class DotParser
   end
 
   def attr_from_string(line)
+    splited = line.strip.split('[')
+    node = splited[0].strip
+    attr_splited = splited[1].split('=')
+    attr_name = attr_splited[0]
+    attr_count = attr_splited[1].tr('];', '')
+
+    attr_count.to_i.times.each do
+      @builder.add_attr(node, attr_name)
+    end
+
   end
 
 end
@@ -45,14 +55,18 @@ class GraphBuilder
   end
 
   def add_attr(node, attr)
-
+    if @attrs[node].nil?
+      @attrs[node] = [attr]
+    else
+      @attrs[node] += [attr]
+    end
   end
 
   def graph
     @graph
   end
 
+  def attrs
+    @attrs
+  end
 end
-
-
-puts DotParser.parse('sample.dot').inspect
