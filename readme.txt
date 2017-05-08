@@ -27,4 +27,4 @@ Entrada e Saida:
 
 
 Execucao:
-    Para executar o algoritmo, utilizar o comando: ruby caminhos-minimos.rb < grafo.dot (troque grafo pelo nome do seu arquivo .dot)
+    Para executar o algoritmo, utilizar o comando: ./conta-caminhos grafo.dot (troque grafo.dot pelo caminho do seu arquivo .dot)
